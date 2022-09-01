@@ -20,8 +20,8 @@ const (
 	// API_ADVERTISER_LIST 获取已授权的账户（店铺/代理商）
 	API_ADVERTISER_LIST = "/open_api/oauth2/advertiser/get/"
 
-	// API_ADVERTISER_AD_AUOTA 获取在投计划配额信息
-	API_ADVERTISER_AD_AUOTA = "/open_api/v1.0/qianchuan/ad/quota/get/"
+	// API_ADVERTISER_AD_QUOTA 获取在投计划配额信息
+	API_ADVERTISER_AD_QUOTA = "/open_api/v1.0/qianchuan/ad/quota/get/"
 
 	// API_SHOP_ADVERTISER_LIST 获取店铺账户关联的广告账户列表
 	API_SHOP_ADVERTISER_LIST = "/open_api/v1.0/qianchuan/shop/advertiser/list/"

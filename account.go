@@ -2,7 +2,6 @@ package SimqianchuanSDK
 
 import (
 	"github.com/CriarBrand/SimqianchuanSDK/conf"
-	"github.com/CriarBrand/SimqianchuanSDK/model"
 	"github.com/CriarBrand/SimqianchuanSDK/utils"
 	"github.com/guonaihong/gout"
 )
@@ -92,12 +91,12 @@ func (client *Client) GetAgentAdvertiserList(request *AccountAdvertiserListReq, 
 	return client.DoRequest(df, response)
 }
 
-// -----------------------------------------------------获取千川广告账户全量信息----------------------------------------------
+// -----------------------------------------------------获取千川广告账户基础信息----------------------------------------------
 
 // AdvertiserPublicInfoReq 获取千川广告账户基础信息-请求
 type AdvertiserPublicInfoReq struct {
-	AdvertiserIds model.ListOfInt64
-	AccessToken   string // 调用/oauth/access_token/生成的token，此token需要用户授权。
+	AdvertiserPublicInfoReqBase
+	AccessToken string // 调用/oauth/access_token/生成的token，此token需要用户授权。
 }
 
 type AdvertiserPublicInfoResData struct {
@@ -112,14 +111,65 @@ type AdvertiserPublicInfoReqBase struct {
 	AdvertiserIds []int64 `json:"advertiser_ids,omitempty"`
 }
 
-// GetAdvertiserPublicInfo 获取千川广告账户全量信息
+// GetAdvertiserPublicInfo 获取千川广告账户基础信息
 func (client *Client) GetAdvertiserPublicInfo(request *AdvertiserPublicInfoReq, response *[]AdvertiserPublicInfoResData) error {
 	df := gout.GET(client.url(conf.API_ADVERTISER_PUBLIC_INFO)).
 		SetHeader(gout.H{
 			"Access-Token": request.AccessToken,
 		}).
-		SetQuery(utils.BuildQueryToMap(AdvertiserPublicInfoReqBase{
-			AdvertiserIds: request.AdvertiserIds,
-		}))
+		SetQuery(utils.BuildQueryToMap(request.AdvertiserPublicInfoReqBase))
+	return client.DoRequest(df, response)
+}
+
+// -----------------------------------------------------获取在投计划配额信息----------------------------------------------
+
+// AdvertiserAdQuotaReq 获取在投计划配额信息-请求
+type AdvertiserAdQuotaReq struct {
+	AdvertiserId int64
+	AccessToken  string // 调用/oauth/access_token/生成的token，此token需要用户授权。
+}
+
+type AdvertiserAdQuotaResData struct {
+	QuotaFeed struct {
+		DeliveryInfo struct {
+			AdlabNum   int64 `json:"adlab_num"`
+			NoAdlabNum int64 `json:"no_adlab_num"`
+			TotalNum   int64 `json:"total_num"`
+		} `json:"delivery_info"`
+		MonthCost int64 `json:"month_cost"`
+		QuotaGear int64 `json:"quota_gear"`
+		QuotaInfo struct {
+			TotalNum int64 `json:"total_num"`
+		} `json:"quota_info"`
+		StageInfo struct {
+			IsPrimary int64 `json:"is_primary"`
+		} `json:"stage_info"`
+	} `json:"quota_feed"`
+	QuotaSearch struct {
+		DeliveryInfo struct {
+			AdlabNum   int64 `json:"adlab_num"`
+			NoAdlabNum int64 `json:"no_adlab_num"`
+			TotalNum   int64 `json:"total_num"`
+		} `json:"delivery_info"`
+		MonthCost int64 `json:"month_cost"`
+		QuotaGear int64 `json:"quota_gear"`
+		QuotaInfo struct {
+			TotalNum int64 `json:"total_num"`
+		} `json:"quota_info"`
+		StageInfo struct {
+			IsPrimary int64 `json:"is_primary"`
+		} `json:"stage_info"`
+	} `json:"quota_search"`
+}
+
+// GetAdvertiserAdQuota 获取在投计划配额信息
+func (client *Client) GetAdvertiserAdQuota(request *AdvertiserAdQuotaReq, response *AdvertiserAdQuotaResData) error {
+	df := gout.GET(client.url(conf.API_ADVERTISER_AD_QUOTA)).
+		SetHeader(gout.H{
+			"Access-Token": request.AccessToken,
+		}).
+		SetQuery(gout.H{
+			"advertiser_id": request.AdvertiserId,
+		})
 	return client.DoRequest(df, response)
 }
