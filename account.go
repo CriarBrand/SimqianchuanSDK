@@ -142,7 +142,9 @@ type AdvertiserAdQuotaResData struct {
 			TotalNum int64 `json:"total_num"`
 		} `json:"quota_info"`
 		StageInfo struct {
-			IsPrimary int64 `json:"is_primary"`
+			IsPrimary int64  `json:"is_primary"`
+			StartDay  string `json:"start_day"`
+			EndDay    string `json:"end_day"`
 		} `json:"stage_info"`
 	} `json:"quota_feed"`
 	QuotaSearch struct {
@@ -157,7 +159,9 @@ type AdvertiserAdQuotaResData struct {
 			TotalNum int64 `json:"total_num"`
 		} `json:"quota_info"`
 		StageInfo struct {
-			IsPrimary int64 `json:"is_primary"`
+			IsPrimary int64  `json:"is_primary"`
+			StartDay  string `json:"start_day"`
+			EndDay    string `json:"end_day"`
 		} `json:"stage_info"`
 	} `json:"quota_search"`
 }
