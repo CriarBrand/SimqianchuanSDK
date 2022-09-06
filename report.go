@@ -37,29 +37,44 @@ type AdvertiserReportReqFiltering struct {
 }
 
 type AdvertiserReportResDetail struct {
-	AdvertiserId         int64   `json:"advertiser_id"`            // 广告主id
-	StatCost             float64 `json:"stat_cost"`                // 消耗
-	ShowCnt              int64   `json:"show_cnt"`                 // 展示次数
-	Ctr                  float64 `json:"ctr"`                      // 点击率
-	CpmPlatform          float64 `json:"cpm_platform"`             // 平均千次展示费用
-	ClickCnt             int64   `json:"click_cnt"`                // 点击次数
-	PayOrderCount        int64   `json:"pay_order_count"`          // 成交订单数
-	CreateOrderAmount    float64 `json:"create_order_amount"`      // 下单成交金额
-	CreateOrderCount     int64   `json:"create_order_count"`       // 下单订单数
-	PayOrderAmount       float64 `json:"pay_order_amount"`         // 成交订单金额
-	CreateOrderRoi       float64 `json:"create_order_roi"`         // 下单roi
-	DyFollow             int64   `json:"dy_follow"`                // 新增粉丝数
-	PrepayAndPayOrderRoi float64 `json:"prepay_and_pay_order_roi"` // 支付roi
-	PrepayOrderCount     int64   `json:"prepay_order_count"`       // 广告预售订单数
-	PrepayOrderAmount    float64 `json:"prepay_order_amount"`      // 广告预售订单金额
-	TotalPlay            int64   `json:"total_play"`               // 播放数
-	PlayDuration3s       int64   `json:"play_duration_3s"`         // 3s播放数
-	Play25FeedBreak      int64   `json:"play_25_feed_break"`       // 25%进度播放数
-	Play50FeedBreak      int64   `json:"play_50_feed_break"`       // 50%进度播放数
-	Play75FeedBreak      int64   `json:"play_75_feed_break"`       // 75%进度播放数
-	PlayOver             int64   `json:"play_over"`                // 播放完成数
-	PlayOverRate         float64 `json:"play_over_rate"`           // 完播率
-
+	AdvertiserId               int64   `json:"advertiser_id"`
+	StatCost                   float64 `json:"stat_cost"`
+	ShowCnt                    int64   `json:"show_cnt"`
+	Ctr                        float64 `json:"ctr"`
+	CpmPlatform                float64 `json:"cpm_platform"`
+	ClickCnt                   int64   `json:"click_cnt"`
+	PayOrderCount              int64   `json:"pay_order_count"`
+	CreateOrderAmount          float64 `json:"create_order_amount"`
+	CreateOrderCount           int64   `json:"create_order_count"`
+	PayOrderAmount             float64 `json:"pay_order_amount"`
+	CreateOrderRoi             float64 `json:"create_order_roi"`
+	PrepayAndPayOrderRoi       float64 `json:"prepay_and_pay_order_roi"`
+	PrepayOrderCount           int64   `json:"prepay_order_count"`
+	PrepayOrderAmount          float64 `json:"prepay_order_amount"`
+	DyFollow                   int64   `json:"dy_follow"`
+	ConvertCnt                 int64   `json:"convert_cnt"`
+	ConvertCost                float64 `json:"convert_cost"`
+	ConvertRate                float64 `json:"convert_rate"`
+	DyShare                    int64   `json:"dy_share"`
+	DyComment                  int64   `json:"dy_comment"`
+	DyLike                     int64   `json:"dy_like"`
+	LivePayOrderCostPerOrder   float64 `json:"live_pay_order_cost_per_order"`
+	LubanLiveEnterCnt          int64   `json:"luban_live_enter_cnt"`
+	LiveWatchOneMinuteCount    int64   `json:"live_watch_one_minute_count"`
+	LiveFansClubJoinCnt        int64   `json:"live_fans_club_join_cnt"`
+	LubanLiveSlidecartClickCnt int64   `json:"luban_live_slidecart_click_cnt"`
+	LubanLiveClickProductCnt   int64   `json:"luban_live_click_product_cnt"`
+	LubanLiveCommentCnt        int64   `json:"luban_live_comment_cnt"`
+	LubanLiveShareCnt          int64   `json:"luban_live_share_cnt"`
+	LubanLiveGiftCnt           int64   `json:"luban_live_gift_cnt"`
+	LubanLiveGiftAmount        float64 `json:"luban_live_gift_amount"`
+	TotalPlay                  int64   `json:"total_play"`
+	PlayDuration3S             int64   `json:"play_duration_3s"`
+	Play25FeedBreak            int64   `json:"play_25_feed_break"`
+	Play50FeedBreak            int64   `json:"play_50_feed_break"`
+	Play75FeedBreak            int64   `json:"play_75_feed_break"`
+	PlayOver                   int64   `json:"play_over"`
+	PlayOverRate               float64 `json:"play_over_rate"`
 }
 
 type AdvertiserReportResData struct {
@@ -108,8 +123,45 @@ type AdReportReqFiltering struct {
 }
 
 type AdReportResDetail struct {
-	AdId int64 `json:"ad_id"`
-	AdvertiserReportResDetail
+	AdvertiserId               int64   `json:"advertiser_id"`
+	AdId                       int64   `json:"ad_id"`
+	StatCost                   float64 `json:"stat_cost"`
+	ShowCnt                    int64   `json:"show_cnt"`
+	Ctr                        float64 `json:"ctr"`
+	CpmPlatform                float64 `json:"cpm_platform"`
+	ClickCnt                   int64   `json:"click_cnt"`
+	PayOrderCount              int64   `json:"pay_order_count"`
+	CreateOrderAmount          float64 `json:"create_order_amount"`
+	CreateOrderCount           int64   `json:"create_order_count"`
+	PayOrderAmount             float64 `json:"pay_order_amount"`
+	CreateOrderRoi             float64 `json:"create_order_roi"`
+	PrepayAndPayOrderRoi       float64 `json:"prepay_and_pay_order_roi"`
+	PrepayOrderCount           int64   `json:"prepay_order_count"`
+	PrepayOrderAmount          float64 `json:"prepay_order_amount"`
+	DyFollow                   int64   `json:"dy_follow"`
+	ConvertCnt                 int64   `json:"convert_cnt"`
+	ConvertCost                float64 `json:"convert_cost"`
+	ConvertRate                float64 `json:"convert_rate"`
+	DyShare                    int64   `json:"dy_share"`
+	DyComment                  int64   `json:"dy_comment"`
+	DyLike                     int64   `json:"dy_like"`
+	LivePayOrderCostPerOrder   float64 `json:"live_pay_order_cost_per_order"`
+	LubanLiveEnterCnt          int64   `json:"luban_live_enter_cnt"`
+	LiveWatchOneMinuteCount    int64   `json:"live_watch_one_minute_count"`
+	LiveFansClubJoinCnt        int64   `json:"live_fans_club_join_cnt"`
+	LubanLiveSlidecartClickCnt int64   `json:"luban_live_slidecart_click_cnt"`
+	LubanLiveClickProductCnt   int64   `json:"luban_live_click_product_cnt"`
+	LubanLiveCommentCnt        int64   `json:"luban_live_comment_cnt"`
+	LubanLiveShareCnt          int64   `json:"luban_live_share_cnt"`
+	LubanLiveGiftCnt           int64   `json:"luban_live_gift_cnt"`
+	LubanLiveGiftAmount        float64 `json:"luban_live_gift_amount"`
+	TotalPlay                  int64   `json:"total_play"`
+	PlayDuration3S             int64   `json:"play_duration_3s"`
+	Play25FeedBreak            int64   `json:"play_25_feed_break"`
+	Play50FeedBreak            int64   `json:"play_50_feed_break"`
+	Play75FeedBreak            int64   `json:"play_75_feed_break"`
+	PlayOver                   int64   `json:"play_over"`
+	PlayOverRate               float64 `json:"play_over_rate"`
 }
 
 type AdReportResData struct {
