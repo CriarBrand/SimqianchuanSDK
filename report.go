@@ -107,9 +107,14 @@ type AdReportReqFiltering struct {
 	Status         string  `json:"status,omitempty"`          // 按计划状态过滤，不传入即默认返回“全部（包含已删除）”，其他规则详见 【附录-广告计划查询状态】 （暂不支持“系统暂停”和“在投计划配额超限”） 注意：当下单平台为“小店随心推”时，不支持
 }
 
+type AdReportResDetail struct {
+	AdId int64 `json:"ad_id"`
+	AdvertiserReportResDetail
+}
+
 type AdReportResData struct {
-	List     []AdvertiserReportResDetail `json:"list"`
-	PageInfo PageInfo                    `json:"page_info"`
+	List     []AdReportResDetail `json:"list"`
+	PageInfo PageInfo            `json:"page_info"`
 }
 
 // GetAdReport 获取广告计划报表数据
