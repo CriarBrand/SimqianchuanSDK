@@ -136,8 +136,8 @@ type AdvertiserAdQuotaResData struct {
 			NoAdlabNum int64 `json:"no_adlab_num"`
 			TotalNum   int64 `json:"total_num"`
 		} `json:"delivery_info"`
-		MonthCost int64 `json:"month_cost"`
-		QuotaGear int64 `json:"quota_gear"`
+		MonthCost float64 `json:"month_cost"`
+		QuotaGear int64   `json:"quota_gear"`
 		QuotaInfo struct {
 			TotalNum int64 `json:"total_num"`
 		} `json:"quota_info"`
@@ -153,8 +153,8 @@ type AdvertiserAdQuotaResData struct {
 			NoAdlabNum int64 `json:"no_adlab_num"`
 			TotalNum   int64 `json:"total_num"`
 		} `json:"delivery_info"`
-		MonthCost int64 `json:"month_cost"`
-		QuotaGear int64 `json:"quota_gear"`
+		MonthCost float64 `json:"month_cost"`
+		QuotaGear int64   `json:"quota_gear"`
 		QuotaInfo struct {
 			TotalNum int64 `json:"total_num"`
 		} `json:"quota_info"`
