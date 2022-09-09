@@ -146,6 +146,9 @@ const (
 	// API_DMP_AUDIENCES_GET 查询人群包列表
 	API_DMP_AUDIENCES_GET = "/open_api/v1.0/qianchuan/dmp/audiences/get/"
 
+	// API_WALLET_FINANCE_GET 获取账户钱包信息
+	API_WALLET_FINANCE_GET = "/open_api/v1.0/qianchuan/finance/wallet/get/"
+
 	//---------------千川巨量--------------------
 
 	//查询抖音号id对应的达人信息
