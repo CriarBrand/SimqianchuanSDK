@@ -45,7 +45,7 @@ type FinanceWalletResData struct {
 	ShareBalanceValidGrantDefault   int64 `json:"share_balance_valid_grant_default"`   // 共享赠款余额-可用余额-赠款-通用
 	ShareBalanceValid               int64 `json:"share_balance_valid"`                 // 共享赠款余额-可用余额
 	ShareBalanceExpiring            int64 `json:"share_balance_expiring"`              // 共享赠款余额-30天内到期余额
-	ShareExpiringDetailList         struct {
+	ShareExpiringDetailList         []struct {
 		Category   string `json:"category"`    // 类别，允许值： CONFIRM 站内信息流及其他 DEFAULT 通用 SEARCH 站内搜索 UNION 网盟穿山甲
 		Amount     int64  `json:"amount"`      // 金额
 		ExpireTime int64  `json:"expire_time"` // 到期时间
