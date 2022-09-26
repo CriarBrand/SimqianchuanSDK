@@ -121,6 +121,50 @@ func (client *Client) GetAdvertiserPublicInfo(request *AdvertiserPublicInfoReq, 
 	return client.DoRequest(df, response)
 }
 
+// -----------------------------------------------------获取千川广告账户全量信息----------------------------------------------
+
+// AdvertiserFullInfoReq 获取千川广告账户全量信息-请求
+type AdvertiserFullInfoReq struct {
+	AdvertiserFullInfoReqBase
+	AccessToken string // 调用/oauth/access_token/生成的token，此token需要用户授权。
+}
+
+type AdvertiserFullInfoResData struct {
+	ID                      int64  `json:"id"`                        //广告主ID
+	Name                    string `json:"name"`                      //账户名
+	Role                    string `json:"role"`                      //角色, 详见 【附录-广告主角色】
+	Status                  string `json:"status"`                    //状态,详见 【附录-广告主状态】
+	Address                 string `json:"address"`                   //地址
+	LicenseUrl              string `json:"license_url"`               //执照预览地址(链接默认1小时内有效)
+	LicenseNo               string `json:"license_no"`                //执照编号
+	LicenseProvince         string `json:"license_province"`          //执照省份
+	LicenseCity             string `json:"license_city"`              //执照城市
+	Company                 string `json:"company"`                   //公司名
+	Brand                   string `json:"brand"`                     //经营类别
+	PromotionArea           string `json:"promotion_area"`            //运营区域
+	PromotionCenterProvince string `json:"promotion_center_province"` //运营省份
+	PromotionCenterCity     string `json:"promotion_center_city"`     //运营城市
+	FirstIndustryName       string `json:"first_industry_name"`       //一级行业名称（新版）
+	SecondIndustryName      string `json:"second_industry_name"`      //二级行业名称（新版）
+	Reason                  string `json:"reason"`                    //审核拒绝原因
+	CreateTime              string `json:"create_time"`               //创建时间
+}
+
+type AdvertiserFullInfoReqBase struct {
+	AdvertiserIds []int64  `json:"advertiser_ids"`   // 广告主ID集合(如果包含没有访问权限的ID,将返回no permission error),取值范围: 1-100
+	Fields        []string `json:"fields,omitempty"` // 查询字段集合, 默认:查询所有。字段详见下方response字段定义
+}
+
+// GetAdvertiserFullInfo 获取千川广告账户全量信息
+func (client *Client) GetAdvertiserFullInfo(request *AdvertiserFullInfoReq, response *[]AdvertiserFullInfoResData) error {
+	df := gout.GET(client.url(conf.API_ADVERTISER_INFO)).
+		SetHeader(gout.H{
+			"Access-Token": request.AccessToken,
+		}).
+		SetQuery(utils.BuildQueryToMap(request.AdvertiserFullInfoReqBase))
+	return client.DoRequest(df, response)
+}
+
 // -----------------------------------------------------获取在投计划配额信息----------------------------------------------
 
 // AdvertiserAdQuotaReq 获取在投计划配额信息-请求
