@@ -237,3 +237,45 @@ func (client *Client) GetInterestActionInterestKeyword(request *GetInterestActio
 		SetQuery(utils.BuildQueryToMap(request.GetInterestActionInterestKeywordReqBase))
 	return client.DoRequest(df, response)
 }
+
+// -----------------------------------------------------查询创编可用人群----------------------------------------------
+
+type GetDmpAudiencesReqBase struct {
+	AdvertiserId        int64 `json:"advertiser_id"`
+	RetargetingTagsType int64 `json:"retargeting_tags_type"` // 人群包类型，枚举值：0：不限营销目标的平台精选人群包，1：自定义人群包
+	Offset              int64 `json:"offset,omitempty"`      // 偏移,类似于SQL中offset(起始为0,翻页时new_offset=old_offset+limit），默认值：0，取值范围:≥ 0
+	Limit               int64 `json:"limit,omitempty"`       // 返回数据量，默认值：100，取值范围：1-100
+}
+
+type GetDmpAudiencesReq struct {
+	AccessToken string // 调用/oauth/access_token/生成的token，此token需要用户授权。
+	GetDmpAudiencesReqBase
+}
+
+type GetDmpAudiencesRes struct {
+	Offset          int64                         `json:"offset"`           // 下一次查询的偏移,类似于SQL中offset(起始为0,翻页时new_offset=old_offset+limit），返回0时，代表已查询到最后一页
+	TotalNum        int64                         `json:"total_num"`        // 总的人群包数量
+	RetargetingTags []DmpAudiencesRetargetingTags `json:"retargeting_tags"` // 人群包列表
+}
+
+type DmpAudiencesRetargetingTags struct {
+	HasOfflineTag      int64       `json:"has_offline_tag"`      // 是否包含已下线标签，0 不包含，1 包含
+	RetargetingTagsId  int64       `json:"retargeting_tags_id"`  // 人群包id
+	IsCommon           int64       `json:"is_common"`            // 0 该人群包不支持通投，1 该人群包支持通投，注意：不支持通投的人群包不能在千川平台创建计划，否则会报错。
+	Name               string      `json:"name"`                 // 人群包名称
+	RetargetingTagsTip string      `json:"retargeting_tags_tip"` // 人群包说明
+	RetargetingTagsOp  string      `json:"retargeting_tags_op"`  // 人群包可选的定向规则，枚举值：INCLUDE只支持定向，EXCLUDE只支持排除，ALL支持两种规则。 当source为RETARGETING_TAGS_TYPE_PLATFORM时，只支持INCLUDE或EXCLUDE；当source为RETARGETING_TAGS_TYPE_CUSTOM时，支持ALL
+	Status             int64       `json:"status"`               // 人群包状态，详见【附录-DMP相关-人群包状态】
+	Source             interface{} `json:"source"`               // 人群包来源，自定义类详见【附录-DMP相关-人群包来源】，平台精选类返回空值
+	CoverNum           int64       `json:"cover_num"`            // 预估人群包覆盖人群数目
+}
+
+// GetDmpAudiences 查询创编可用人群
+func (client *Client) GetDmpAudiences(request *GetDmpAudiencesReq, response *GetDmpAudiencesRes) error {
+	df := gout.GET(client.url(conf.API_DMP_AUDIENCES_GET)).
+		SetHeader(gout.H{
+			"Access-Token": request.AccessToken,
+		}).
+		SetQuery(utils.BuildQueryToMap(request.GetDmpAudiencesReqBase))
+	return client.DoRequest(df, response)
+}

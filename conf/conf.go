@@ -143,7 +143,7 @@ const (
 	// API_TOOLS_CREATIVE_WORD_SELECT 查询动态创意词包
 	API_TOOLS_CREATIVE_WORD_SELECT = "/open_api/2/tools/creative_word/select/"
 
-	// API_DMP_AUDIENCES_GET 查询人群包列表
+	// API_DMP_AUDIENCES_GET 查询创编可用人群
 	API_DMP_AUDIENCES_GET = "/open_api/v1.0/qianchuan/dmp/audiences/get/"
 
 	// API_WALLET_FINANCE_GET 获取账户钱包信息
