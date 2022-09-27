@@ -200,6 +200,123 @@ func (client *Client) GetAdList(request *AdListGetReq, response *AdListGetResDat
 
 //--------------------------------------------获取计划详情（含创意信息）--------------------------------------------------------------------
 
+// GetAdDetailReq 获取计划详情（含创意信息）
+type GetAdDetailReq struct {
+	AccessToken string `json:"access_token"` // 调用/oauth/access_token/生成的token，此token需要用户授权。
+	GetAdDetailReqBase
+}
+
+type GetAdDetailReqBase struct {
+	AdvertiserId int64 `json:"advertiser_id"` // 千川广告账户ID
+	AdId         int64 `json:"ad_id"`         // 计划ID
+}
+
+type GetAdDetailRes struct {
+	Name                          string                                  `json:"name"`                             // 计划名称
+	AdCreateTime                  string                                  `json:"ad_create_time,omitempty"`         // 计划创建时间
+	AdId                          int64                                   `json:"ad_id"`                            // 计划ID
+	FirstIndustryId               int64                                   `json:"first_industry_id,omitempty"`      //创意一级行业ID
+	MarketingGoal                 string                                  `json:"marketing_goal,omitempty"`         // 营销目标
+	CreativeMaterialMode          string                                  `json:"creative_material_mode,omitempty"` // 创意呈现方式
+	Status                        string                                  `json:"status,omitempty"`                 // 计划投放状态,详见【附录-枚举值】
+	LabAdType                     string                                  `json:"lab_ad_type,omitempty"`            // 托管计划类型，NOT_LAB_AD：非托管计划，LAB_AD：托管计划
+	DynamicCreative               *int64                                  `json:"dynamic_creative,omitempty"`       // 是否启用动态创意，0 关闭、1 开启
+	PromotionWay                  string                                  `json:"promotion_way,omitempty"`          // 推广方式
+	SecondIndustryId              int64                                   `json:"second_industry_id,omitempty"`     // 创意二级行业ID
+	AdKeywords                    []string                                `json:"ad_keywords,omitempty"`            // 创意标签
+	CampaignId                    int64                                   `json:"campaign_id,omitempty"`            // 广告组ID（若为托管计划，则返回null）
+	IsIntelligent                 *int64                                  `json:"is_intelligent,omitempty"`         // 是否启用智选流量，0 关闭、1 开启
+	AdModifyTime                  string                                  `json:"ad_modify_time,omitempty"`         // 计划修改时间
+	TrackUrl                      interface{}                             `json:"track_url,omitempty"`
+	ThirdIndustryId               int64                                   `json:"third_industry_id,omitempty"`                // 创意三级行业ID
+	MarketingScene                string                                  `json:"marketing_scene,omitempty"`                  // 营销场景，FEED 通投广告，SEARCH 搜索广告
+	IsHomepageHide                *int64                                  `json:"is_homepage_hide,omitempty"`                 // 抖音主页是否隐藏视频
+	CreativeAutoGenerate          *int64                                  `json:"creative_auto_generate,omitempty"`           // 是否开启「生成更多创意」
+	OptStatus                     string                                  `json:"opt_status,omitempty"`                       // 计划操作状态,详见【附录-枚举值】
+	ProgrammaticCreativeTitleList []AdCreateProgrammaticCreativeTitleList `json:"programmatic_creative_title_list,omitempty"` // 程序化创意标题信息
+	ProgrammaticCreativeMediaList []AdCreateProgrammaticCreativeMediaList `json:"programmatic_creative_media_list,omitempty"` // 程序化创意素材信息
+	ProgrammaticCreativeCard      *AdCreateProgrammaticCreativeCard       `json:"programmatic_creative_card,omitempty"`       // 程序化创意推广卡片信息
+	Audience                      AdDetailAudience                        `json:"audience"`                                   // 定向人群设置
+	DeliverySetting               AdDetailDeliverySetting                 `json:"delivery_setting"`                           // 投放设置
+	ProductInfo                   []AdListGetResDataProductInfo           `json:"product_info,omitempty"`                     // 商品列表
+	Keywords                      []struct {
+		Id        int64  `json:"id,omitempty"`         // 关键词id
+		WordId    int64  `json:"word_id,omitempty"`    // 词id，不同计划下如果关键词字面相同，词id会相同
+		Word      string `json:"word,omitempty"`       // 关键词字面，长度不超过30，一个汉字长度计为1，一个英文字符长度计为0.5，不能包含emoji 当keywords入参时必填
+		MatchType string `json:"match_type,omitempty"` // 匹配类型，允许值: PHRASE 短语匹配，EXTENSIVE 广泛匹配，PRECISION 精准匹配 当keywords入参时必填
+		Status    string `json:"status,omitempty"`     // 关键词状态 CONFIRM 审核通过且可代入 REJECT 审核拒绝 AUDIT 新建审核中 DELETE 已删除 PAUSED 词暂停
+
+	} `json:"keywords,omitempty"`
+	PivativeWords *struct {
+		PhraseWords  []string `json:"phrase_words,omitempty"`  // 短语否定词列表
+		PreciseWords []string `json:"precise_words,omitempty"` // 精确否定词列表
+	} `json:"pivative_words,omitempty"` // 搜索否定词
+
+	AwemeInfo []struct {
+		AwemeShowId string `json:"aweme_show_id,omitempty"` // 抖音号，即客户在手机端感知到的抖音号，向客户批量抖音号时请使用该字段
+		AwemeAvatar string `json:"aweme_avatar,omitempty"`  // 抖音号头像
+		AwemeId     int64  `json:"aweme_id,omitempty"`      // 抖音ID
+		AwemeName   string `json:"aweme_name,omitempty"`    // 抖音号昵称
+	} `json:"aweme_info,omitempty"` // 计划中关联的抖音号信息
+	CreativeList []struct {
+		CreativeId         int64  `json:"creative_id,omitempty"`          // 创意ID，程序化创意审核通过后才会生成创意ID
+		ImageMode          string `json:"image_mode,omitempty"`           // 创意素材类型
+		CreativeCreateTime string `json:"creative_create_time,omitempty"` // 创意创建时间
+		CreativeModifyTime string `json:"creative_modify_time,omitempty"` // 创意修改时间
+		VideoMaterial      *struct {
+			Id int64 `json:"id,omitempty"` // 底层数据id，无实际用途（注：非素材ID）
+			AdCreateCustomVideoMaterial
+			IsAutoGenerate *int64 `json:"is_auto_generate,omitempty"` // 是否为派生创意标识，1：是，0：不是
+		} `json:"video_material,omitempty"` // 视频类型素材
+		ImageMaterial *struct {
+			Id             int64    `json:"id,omitempty"`               // 底层数据id，无实际用途（注：非素材ID）
+			ImageIds       []string `json:"image_ids,omitempty"`        // 图片ID列表
+			IsAutoGenerate *int64   `json:"is_auto_generate,omitempty"` // 是否为派生创意标识，1：是，0：不是
+		} `json:"image_material,omitempty"` // 图片类型素材
+		TitleMaterial *struct {
+			Id int64 `json:"id,omitempty"` // 素材唯一标识
+			AdCreateTitleMaterial
+		} `json:"title_material,omitempty"` // 标题类型素材，若选择了抖音号上的视频，不支持修改标题
+		PromotionCardMaterial *struct {
+			Id          int64 `json:"id,omitempty"`           // 素材唯一标识
+			ComponentId int64 `json:"component_id,omitempty"` // 组件唯一标识
+			AdCreatePromotionCardMaterial
+		} `json:"promotion_card_material,omitempty"` // 推广卡片素材
+	} `json:"creative_list,omitempty"` // 创意信息（若为托管计划，则返回空数组）
+	RoomInfo []struct {
+		AnchorId     int64  `json:"anchor_id,omitempty"`     // 主播ID
+		RoomStatus   string `json:"room_status,omitempty"`   // 直播间状态（若未开播，则返回NULL）
+		AnchorName   string `json:"anchor_name,omitempty"`   // 主播名称
+		RoomTitle    string `json:"room_title,omitempty"`    // 直播间名称（若未开播，则返回NULL）
+		AnchorAvatar string `json:"anchor_avatar,omitempty"` // 主播头像
+	} `json:"room_info,omitempty"` // 直播间列表
+}
+
+type AdDetailAudience struct {
+	AdCreateAudience
+	InactiveRetargetingTags []struct {
+		RetargetingTag int64  `json:"retargeting_tag,omitempty"` // 人群包id
+		Name           string `json:"name,omitempty"`            // 人群包名称
+		InactiveType   string `json:"inactive_type,omitempty"`   // 失效类型，EXPIRE 人群包过期，TAG_OFFLINE 人群包tag下线，MANUAL_OFFLINE 精选人群包手动下线
+	} `json:"inactive_retargeting_tags,omitempty"` // 失效的人群包列表
+}
+
+type AdDetailDeliverySetting struct {
+	AdCreateDeliverySetting
+	ReviveBudget float64 `json:"revive_budget,omitempty"` // 复活预算
+	DeepCpaBid   float64 `json:"deep_cpa_bid,omitempty"`
+}
+
+// GetAdDetail 获取计划详情（含创意信息）
+func (client *Client) GetAdDetail(request *GetAdDetailReq, response *GetAdDetailRes) error {
+	df := gout.GET(client.url(conf.API_AD_DETAIL_GET)).
+		SetHeader(gout.H{
+			"Access-Token": request.AccessToken,
+		}).
+		SetQuery(utils.BuildQueryToMap(request.GetAdDetailReqBase))
+	return client.DoRequest(df, response)
+}
+
 //--------------------------------------------创建计划（含创意生成规则）--------------------------------------------------------------------
 
 // AdCreateReq 创建计划-请求
@@ -215,7 +332,7 @@ type AdCreateBody struct {
 	MarketingScene  string                  `json:"marketing_scene"`          // 营销场景，允许值：FEED 通投广告，SEARCH 搜索广告
 	Name            string                  `json:"name"`                     // 计划名称，长度为1-100个字符，其中1个汉字算2位字符。名称不可重复，否则会报错
 	CampaignId      int64                   `json:"campaign_id,omitempty"`    // 千川广告组id 注意：当开启计划托管时，不支持
-	IsIntelligent   int64                   `json:"is_intelligent,omitempty"` // 是否启用智选流量，当“营销场景”为“搜索广告”时必填，允许值： 0 关闭、1 开启
+	IsIntelligent   *int64                  `json:"is_intelligent,omitempty"` // 是否启用智选流量，当“营销场景”为“搜索广告”时必填，允许值： 0 关闭、1 开启
 	AwemeId         int64                   `json:"aweme_id"`
 	ProductIds      []int64                 `json:"product_ids,omitempty"` // 商品id列表，即准备推广的商品列表，可通过【查询店铺商品列表】接口获取名下可推广商品(目前仅支持推一个商品，但需以数组入参)
 	LabAdType       string                  `json:"lab_ad_type,omitempty"` // 是否开启计划托管，允许值： NOT_LAB_AD 非托管计划  LAB_AD 托管计划  注意：1. 当营销目标为VIDEO_PROM_GOODS（短视频带货）且推广方式为STANDARD（专业版） 时，必填  2.bind_type（抖音号）为：OFFICIAL或SELF，抖音号关系类型参考【附录-抖音号授权类型】
@@ -241,15 +358,15 @@ type AdCreateDeliverySetting struct {
 	EndTime               string  `json:"end_time,omitempty"`                 // 投放结束时间，形式如：2017-01-01结束时间不能比起始时间早。当video_schedule_type为SCHEDULE_START_END 设置开始和结束日期时需传入。当live_schedule_type 为SCHEDULE_TIME_ALLDAY 全天、SCHEDULE_TIME_WEEKLY_SETTING 指定时间段时必填；当 live_schedule_type 为SCHEDULE_TIME_FIXEDRANGE固定时长时不能传入
 	ScheduleTime          string  `json:"schedule_time,omitempty"`            // 投放时段，当 live_schedule_type 为SCHEDULE_TIME_WEEKLY_SETTING 时生效默认全时段投放，格式是48*7位字符串，且都是0或1。也就是以半个小时为最小粒度，周一至周日每天分为48个区段，0为不投放，1为投放，不传、全传0、全传1均代表全时段投放。例如：填写"000000000000000000000001111000000000000000000000000000000000000000000001111000000000000000000000000000000000000000000001111000000000000000000000000000000000000000000001111000000000000000000000000000000000000000000001111000000000000000000000000000000000000000000001111000000000000000000000000000000000000000000001111000000000000000000000"，则投放时段为周一到周日的11:30~13:30
 	ScheduleFixedRange    int64   `json:"schedule_fixed_range,omitempty"`     // 固定投放时长当 live_schedule_type 为 SCHEDULE_TIME_FIXEDRANGE 时必填；当live_schedule_type 为SCHEDULE_TIME_ALLDAY 全天、SCHEDULE_TIME_WEEKLY_SETTING 指定时间段时不能传入。单位为秒，最小值为1800（0.5小时），最大值为48*1800（24小时），值必须为1800倍数，不然会报错
-	EnableAutoPause       int64   `json:"enable_auto_pause,omitempty"`        // 是否启用超成本自动暂停，允许值： 0 关闭 1 开启 注意：仅托管计划支持
-	AutoManageStrategyCmd int64   `json:"auto_manage_strategy_cmd,omitempty"` // 托管策略，允许值： 0 优先跑量 1 优先成本 注意：仅托管计划支持
-	EnableFollowMaterial  int64   `json:"enable_follow_material,omitempty"`   // 是否优质素材自动同步投放，允许值： 0 关闭 1 开启 注意：仅托管计划支持
+	EnableAutoPause       *int64  `json:"enable_auto_pause,omitempty"`        // 是否启用超成本自动暂停，允许值： 0 关闭 1 开启 注意：仅托管计划支持
+	AutoManageStrategyCmd *int64  `json:"auto_manage_strategy_cmd,omitempty"` // 托管策略，允许值： 0 优先跑量 1 优先成本 注意：仅托管计划支持
+	EnableFollowMaterial  *int64  `json:"enable_follow_material,omitempty"`   // 是否优质素材自动同步投放，允许值： 0 关闭 1 开启 注意：仅托管计划支持
 }
 
 type AdCreateAudience struct {
 	AudienceMode           string   `json:"audience_mode,omitempty"`            //人群定向模式 当promotion_way为STANDARD专业推广，千川策略赋默认值自定义，无需传值 当promotion_way为SIMPLE极速推广，需入参，允许值：AUTO智能推荐、CUSTOM自定义
 	OrientationId          int64    `json:"orientation_id,omitempty"`           // 定向包id 注意： 1、仅专业推广支持，极速推广不支持 2、若传入，则表示使用定向包 3、一个定向包最多支持同时应用至1500个计划（不包括已删除计划） 4、若该定向包包含失效人群包（过期、标签下线、精选人群下线）则创建计划失败
-	ExcludeLimitedRegion   int64    `json:"exclude_limited_region,omitempty"`   // 排除限运地区，允许值： 0：否，默认值 1：是 注： 1、仅同时满足以下条件时，设置为“1”才有效： - 营销目标为短视频带货 - 地域定向类型为“不限”/地域定向的用户状态类型为“正在该地区的用户” 2、当“可放开定向列表”为REGION且排除限运地区时，依旧会探索限运地区的目标人群
+	ExcludeLimitedRegion   *int64   `json:"exclude_limited_region,omitempty"`   // 排除限运地区，允许值： 0：否，默认值 1：是 注： 1、仅同时满足以下条件时，设置为“1”才有效： - 营销目标为短视频带货 - 地域定向类型为“不限”/地域定向的用户状态类型为“正在该地区的用户” 2、当“可放开定向列表”为REGION且排除限运地区时，依旧会探索限运地区的目标人群
 	District               string   `json:"district,omitempty"`                 // 地域定向类型，配合 city 字段使用，允许值：CITY 省市， COUNTY 区县， NONE 不限默认值为NONE
 	City                   []int64  `json:"city,omitempty"`                     // 具体定向的城市列表，当 district 为COUNTY，CITY为必填，枚举值详见【附件-city.json】省市的传法："city" : [12], "district" : "CITY"区县的传法："city" : [130102], "district" : "COUNTY"
 	LocationType           string   `json:"location_type,omitempty"`            // 地域定向的用户状态类型，当 district 为COUNTY，CITY为必填，允许值：CURRENT 正在该地区的用户、HOME 居住在该地区的用户、TRAVEL 到该地区旅行的用户、ALL 该地区内的所有用户
@@ -259,7 +376,7 @@ type AdCreateAudience struct {
 	AwemeFanBehaviorsDays  string   `json:"aweme_fan_behaviors_days,omitempty"` // 抖音达人互动用户行为天数
 	AwemeFanCategories     []int64  `json:"aweme_fan_categories,omitempty"`     // 抖音达人分类ID列表，与aweme_fan_behaviors同时设置才会生效（抖音达人定向），可通过【工具-抖音达人-查询抖音类目列表】接口获取
 	AwemeFanAccounts       []int64  `json:"aweme_fan_accounts,omitempty"`       // 抖音达人ID列表，与aweme_fan_behaviors同时设置才会生效（抖音达人定向），可通过【工具-抖音达人-查询抖音类目下的推荐达人】接口获取
-	AutoExtendEnabled      int64    `json:"auto_extend_enabled,omitempty"`      // 是否启用智能放量，允许值：0 关闭、1 开启
+	AutoExtendEnabled      *int64   `json:"auto_extend_enabled,omitempty"`      // 是否启用智能放量，允许值：0 关闭、1 开启
 	AutoExtendTargets      []string `json:"auto_extend_targets,omitempty"`      // 可放开定向列表。当auto_extend_enabled=1 时必填。允许值：AGE 年龄、REGION 地域、GENDER 性别、INTEREST_ACTION 行为兴趣 、CUSTOM_AUDIENCE 更多人群-自定义人群
 	Platform               []string `json:"platform,omitempty"`                 // 投放平台列表，允许值：ANDROID、 IOS、不传值为全选
 	SmartInterestAction    string   `json:"smart_interest_action,omitempty"`    // 行为兴趣意向定向模式，允许值：RECOMMEND系统推荐，CUSTOM 自定义；不传值则为不限制需要注意：如果设置RECOMMEND，则传入action_scene、action_days、action_categories、action_words、 interest_categories、interest_words字段都无效
@@ -282,12 +399,12 @@ type AdCreateCreative struct {
 	ThirdIndustryId               int64                                   `json:"third_industry_id,omitempty"`                // 创意三级行业ID。可从【获取行业列表】接口获取
 	AdKeywords                    []string                                `json:"ad_keywords,omitempty"`                      // 创意标签。最多20个标签，且每个标签长度要求为1~20个字符，汉字算2个字符
 	CreativeList                  []AdCreateCreativeList                  `json:"creative_list,omitempty"`                    // 自定义素材信息
-	CreativeAutoGenerate          int64                                   `json:"creative_auto_generate,omitempty"`           // 是否开启「生成更多创意」
+	CreativeAutoGenerate          *int64                                  `json:"creative_auto_generate,omitempty"`           // 是否开启「生成更多创意」
 	ProgrammaticCreativeMediaList []AdCreateProgrammaticCreativeMediaList `json:"programmatic_creative_media_list,omitempty"` // 程序化创意素材信息
 	ProgrammaticCreativeTitleList []AdCreateProgrammaticCreativeTitleList `json:"programmatic_creative_title_list,omitempty"` // 程序化创意标题信息
 	ProgrammaticCreativeCard      *AdCreateProgrammaticCreativeCard       `json:"programmatic_creative_card,omitempty"`       // 程序化创意推广卡片信息
-	IsHomepageHide                int64                                   `json:"is_homepage_hide,omitempty"`                 // 抖音主页是否隐藏视频
-	DynamicCreative               int64                                   `json:"dynamic_creative,omitempty"`                 // 是否启用动态创意，允许值：0 关闭、1 开启 当“营销场景”为“搜索广告”时必填 当“营销场景”为“通投广告”时，不支持传该字段，否则会报错
+	IsHomepageHide                *int64                                  `json:"is_homepage_hide,omitempty"`                 // 抖音主页是否隐藏视频
+	DynamicCreative               *int64                                  `json:"dynamic_creative,omitempty"`                 // 是否启用动态创意，允许值：0 关闭、1 开启 当“营销场景”为“搜索广告”时必填 当“营销场景”为“通投广告”时，不支持传该字段，否则会报错
 }
 
 // AdCreateCreativeList 广告创意 - creative_list
@@ -334,10 +451,11 @@ type AdCreatePromotionCardMaterial struct {
 
 // AdCreateProgrammaticCreativeMediaList 广告创意 - 程序化创意素材信息
 type AdCreateProgrammaticCreativeMediaList struct {
-	ImageMode    string   `json:"image_mode,omitempty"`          // 创意素材类型，支持视频和图片
-	VideoId      string   `json:"video_id,omitempty"`            // 视频ID
-	VideoCoverId string   `json:"video_cover_id,omitempty"`      // 视频封面ID
-	ImageIds     []string `json:"image_ids,omitempty,omitempty"` // 图片ID列表
+	ImageMode      string   `json:"image_mode,omitempty"`          // 创意素材类型，支持视频和图片
+	VideoId        string   `json:"video_id,omitempty"`            // 视频ID
+	VideoCoverId   string   `json:"video_cover_id,omitempty"`      // 视频封面ID
+	ImageIds       []string `json:"image_ids,omitempty,omitempty"` // 图片ID列表
+	IsAutoGenerate int64    `json:"is_auto_generate,omitempty"`    // 是否为派生创意标识，1：是，0：不是
 }
 
 // AdCreateProgrammaticCreativeTitleList 广告创意 - 程序化创意标题信息
