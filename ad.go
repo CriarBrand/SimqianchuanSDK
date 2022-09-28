@@ -1,6 +1,7 @@
 package SimqianchuanSDK
 
 import (
+	"fmt"
 	"github.com/CriarBrand/SimqianchuanSDK/conf"
 	"github.com/CriarBrand/SimqianchuanSDK/utils"
 	"github.com/guonaihong/gout"
@@ -220,7 +221,7 @@ type GetAdDetailRes struct {
 	CreativeMaterialMode          string                                  `json:"creative_material_mode,omitempty"` // 创意呈现方式
 	Status                        string                                  `json:"status,omitempty"`                 // 计划投放状态,详见【附录-枚举值】
 	LabAdType                     string                                  `json:"lab_ad_type,omitempty"`            // 托管计划类型，NOT_LAB_AD：非托管计划，LAB_AD：托管计划
-	DynamicCreative               *int64                                  `json:"dynamic_creative,omitempty"`       // 是否启用动态创意，0 关闭、1 开启
+	DynamicCreative               int64                                   `json:"dynamic_creative,omitempty"`       // 是否启用动态创意，0 关闭、1 开启
 	PromotionWay                  string                                  `json:"promotion_way,omitempty"`          // 推广方式
 	SecondIndustryId              int64                                   `json:"second_industry_id,omitempty"`     // 创意二级行业ID
 	AdKeywords                    []string                                `json:"ad_keywords,omitempty"`            // 创意标签
@@ -231,7 +232,7 @@ type GetAdDetailRes struct {
 	ThirdIndustryId               int64                                   `json:"third_industry_id,omitempty"`                // 创意三级行业ID
 	MarketingScene                string                                  `json:"marketing_scene,omitempty"`                  // 营销场景，FEED 通投广告，SEARCH 搜索广告
 	IsHomepageHide                *int64                                  `json:"is_homepage_hide,omitempty"`                 // 抖音主页是否隐藏视频
-	CreativeAutoGenerate          *int64                                  `json:"creative_auto_generate,omitempty"`           // 是否开启「生成更多创意」
+	CreativeAutoGenerate          int64                                   `json:"creative_auto_generate,omitempty"`           // 是否开启「生成更多创意」
 	OptStatus                     string                                  `json:"opt_status,omitempty"`                       // 计划操作状态,详见【附录-枚举值】
 	ProgrammaticCreativeTitleList []AdCreateProgrammaticCreativeTitleList `json:"programmatic_creative_title_list,omitempty"` // 程序化创意标题信息
 	ProgrammaticCreativeMediaList []AdCreateProgrammaticCreativeMediaList `json:"programmatic_creative_media_list,omitempty"` // 程序化创意素材信息
@@ -309,6 +310,7 @@ type AdDetailDeliverySetting struct {
 
 // GetAdDetail 获取计划详情（含创意信息）
 func (client *Client) GetAdDetail(request *GetAdDetailReq, response *GetAdDetailRes) error {
+	fmt.Println(utils.BuildQueryToMap(request.GetAdDetailReqBase))
 	df := gout.GET(client.url(conf.API_AD_DETAIL_GET)).
 		SetHeader(gout.H{
 			"Access-Token": request.AccessToken,
@@ -399,12 +401,12 @@ type AdCreateCreative struct {
 	ThirdIndustryId               int64                                   `json:"third_industry_id,omitempty"`                // 创意三级行业ID。可从【获取行业列表】接口获取
 	AdKeywords                    []string                                `json:"ad_keywords,omitempty"`                      // 创意标签。最多20个标签，且每个标签长度要求为1~20个字符，汉字算2个字符
 	CreativeList                  []AdCreateCreativeList                  `json:"creative_list,omitempty"`                    // 自定义素材信息
-	CreativeAutoGenerate          *int64                                  `json:"creative_auto_generate,omitempty"`           // 是否开启「生成更多创意」
+	CreativeAutoGenerate          int64                                   `json:"creative_auto_generate,omitempty"`           // 是否开启「生成更多创意」
 	ProgrammaticCreativeMediaList []AdCreateProgrammaticCreativeMediaList `json:"programmatic_creative_media_list,omitempty"` // 程序化创意素材信息
 	ProgrammaticCreativeTitleList []AdCreateProgrammaticCreativeTitleList `json:"programmatic_creative_title_list,omitempty"` // 程序化创意标题信息
 	ProgrammaticCreativeCard      *AdCreateProgrammaticCreativeCard       `json:"programmatic_creative_card,omitempty"`       // 程序化创意推广卡片信息
 	IsHomepageHide                *int64                                  `json:"is_homepage_hide,omitempty"`                 // 抖音主页是否隐藏视频
-	DynamicCreative               *int64                                  `json:"dynamic_creative,omitempty"`                 // 是否启用动态创意，允许值：0 关闭、1 开启 当“营销场景”为“搜索广告”时必填 当“营销场景”为“通投广告”时，不支持传该字段，否则会报错
+	DynamicCreative               int64                                   `json:"dynamic_creative,omitempty"`                 // 是否启用动态创意，允许值：0 关闭、1 开启 当“营销场景”为“搜索广告”时必填 当“营销场景”为“通投广告”时，不支持传该字段，否则会报错
 }
 
 // AdCreateCreativeList 广告创意 - creative_list
