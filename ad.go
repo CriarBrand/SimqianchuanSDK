@@ -263,24 +263,24 @@ type GetAdDetailRes struct {
 		ImageMode          string `json:"image_mode,omitempty"`           // 创意素材类型
 		CreativeCreateTime string `json:"creative_create_time,omitempty"` // 创意创建时间
 		CreativeModifyTime string `json:"creative_modify_time,omitempty"` // 创意修改时间
-		VideoMaterial      *struct {
+		VideoMaterial      struct {
 			Id int64 `json:"id,omitempty"` // 底层数据id，无实际用途（注：非素材ID）
-			AdCreateCustomVideoMaterial
+			*AdCreateCustomVideoMaterial
 			IsAutoGenerate *int64 `json:"is_auto_generate,omitempty"` // 是否为派生创意标识，1：是，0：不是
 		} `json:"video_material,omitempty"` // 视频类型素材
-		ImageMaterial *struct {
+		ImageMaterial struct {
 			Id             int64    `json:"id,omitempty"`               // 底层数据id，无实际用途（注：非素材ID）
 			ImageIds       []string `json:"image_ids,omitempty"`        // 图片ID列表
 			IsAutoGenerate *int64   `json:"is_auto_generate,omitempty"` // 是否为派生创意标识，1：是，0：不是
 		} `json:"image_material,omitempty"` // 图片类型素材
-		TitleMaterial *struct {
+		TitleMaterial struct {
 			Id int64 `json:"id,omitempty"` // 素材唯一标识
-			AdCreateTitleMaterial
+			*AdCreateTitleMaterial
 		} `json:"title_material,omitempty"` // 标题类型素材，若选择了抖音号上的视频，不支持修改标题
-		PromotionCardMaterial *struct {
+		PromotionCardMaterial struct {
 			Id          int64 `json:"id,omitempty"`           // 素材唯一标识
 			ComponentId int64 `json:"component_id,omitempty"` // 组件唯一标识
-			AdCreatePromotionCardMaterial
+			*AdCreatePromotionCardMaterial
 		} `json:"promotion_card_material,omitempty"` // 推广卡片素材
 	} `json:"creative_list,omitempty"` // 创意信息（若为托管计划，则返回空数组）
 	RoomInfo []struct {
@@ -339,7 +339,7 @@ type AdCreateBody struct {
 	DeliverySetting AdCreateDeliverySetting `json:"delivery_setting"`
 	Audience        AdCreateAudience        `json:"audience"`
 	AdCreateCreative
-	Keywords Keywords `json:"keywords,omitempty"` // 仅搜索广告支持，关键词列表，最多可添加1000个关键词
+	Keywords []Keywords `json:"keywords,omitempty"` // 仅搜索广告支持，关键词列表，最多可添加1000个关键词
 }
 
 type AdCreateDeliverySetting struct {
