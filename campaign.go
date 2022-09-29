@@ -54,3 +54,67 @@ func (client *Client) GetCampaignList(request *CampaignListGetReq, response *Cam
 		SetQuery(utils.BuildQueryToMap(request.CampaignListGetReqBase))
 	return client.DoRequest(df, response)
 }
+
+//--------------------------------------------广告组状态更新--------------------------------------------------------------------
+
+// UpdateBatchCampaignStatusReq 广告组状态更新
+type UpdateBatchCampaignStatusReq struct {
+	AccessToken                      string // 调用/oauth/access_token/生成的token，此token需要用户授权。
+	UpdateBatchCampaignStatusReqBody        // POST请求的data
+}
+
+type UpdateBatchCampaignStatusReqBody struct {
+	AdvertiserId int64   `json:"advertiser_id"`
+	CampaignIds  []int64 `json:"campaign_ids"` // 广告组ID，不超过10个，操作更新的广告组ID需要属于千川账户ID否则会报错；
+	OptStatus    string  `json:"opt_status"`   // 操作类型，允许值: "ENABLE"：启用, "DELETE"：删除, "DISABLE"：暂停；对于删除的广告组不可进行任何操作。
+}
+
+type UpdateBatchCampaignStatusRes struct {
+	Success []int64                              `json:"success"` // 更新成功的广告组ID列表
+	Errors  []UpdateBatchCampaignStatusResErrors `json:"errors"`  // 更新失败的广告组列表
+}
+
+type UpdateBatchCampaignStatusResErrors struct {
+	CampaignId   int64  `json:"campaign_id"`   // 更新失败广告组ID
+	ErrorMessage string `json:"error_message"` // 更新失败的原因
+}
+
+// UpdateBatchCampaignStatus 广告组状态更新
+func (client *Client) UpdateBatchCampaignStatus(request *UpdateBatchCampaignStatusReq, response *UpdateBatchCampaignStatusRes) error {
+	df := gout.POST(client.url(conf.API_BATCH_CAMPAIGN_STATUS_UPDATE)).
+		SetHeader(gout.H{
+			"Access-Token": request.AccessToken,
+		}).
+		SetJSON(request.UpdateBatchCampaignStatusReqBody)
+	return client.DoRequest(df, response)
+}
+
+//--------------------------------------------广告组更新--------------------------------------------------------------------
+
+// UpdateCampaignReq 广告组更新
+type UpdateCampaignReq struct {
+	AccessToken           string // 调用/oauth/access_token/生成的token，此token需要用户授权。
+	UpdateCampaignReqBody        // POST请求的data
+}
+
+type UpdateCampaignReqBody struct {
+	AdvertiserId int64   `json:"advertiser_id"`
+	CampaignId   int64   `json:"campaign_id"`             // 广告组ID
+	BudgetMode   string  `json:"budget_mode,omitempty"`   // 预算类型，详见【附录-预算类型】，允许值： BUDGET_MODE_DAY 日预算，BUDGET_MODE_INFINITE 预算不限
+	Budget       float64 `json:"budget,omitempty"`        // 广告组预算，最多支持两位小数，当budget_mode为BUDGET_MODE_DAY时必填，预算单次修改幅度不能低于100元，且日预算不少于300元
+	CampaignName string  `json:"campaign_name,omitempty"` // 广告组名称，长度为1-100个字符，其中1个中文字符算2位 需要注意：广告组名称不修改的话，可不填。填入的话，需与原广告组名称不同，否则报错
+}
+
+type UpdateCampaignRes struct {
+	CampaignId int64 `json:"campaign_id"`
+}
+
+// UpdateCampaign 广告组更新
+func (client *Client) UpdateCampaign(request *UpdateCampaignReq, response *UpdateCampaignRes) error {
+	df := gout.POST(client.url(conf.API_CAMPAIGN_UPDATE)).
+		SetHeader(gout.H{
+			"Access-Token": request.AccessToken,
+		}).
+		SetJSON(request.UpdateCampaignReqBody)
+	return client.DoRequest(df, response)
+}

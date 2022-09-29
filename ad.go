@@ -493,3 +493,41 @@ func (client *Client) CreateAd(request *AdCreateReq, response *AdCreateResData) 
 		SetJSON(request.AdCreateBody)
 	return client.DoRequest(df, response)
 }
+
+//--------------------------------------------更新计划的支付ROI目标--------------------------------------------------------------------
+
+// AdUpdateRoiGoalReq 更新计划的支付ROI目标
+type AdUpdateRoiGoalReq struct {
+	AccessToken          string // 调用/oauth/access_token/生成的token，此token需要用户授权。
+	AdUpdateRoiGoaleBody        // POST请求的data
+}
+
+type AdUpdateRoiGoaleBody struct {
+	AdvertiserId   int64                  `json:"advertiser_id"`
+	RoiGoalUpdates []RoiGoalUpdatesObject `json:"roi_goal_updates"` // 更新计划出价的列表，当前最多支持1个
+}
+
+type RoiGoalUpdatesObject struct {
+	AdId    int64 `json:"ad_id"`    // 需要更新ROI目标的计划id
+	RoiGoal int64 `json:"roi_goal"` // 计划更新之后的支付ROI目标，最多支持两位小数，0.01～100 注意： 按展示付费(oCPM)，根据【保障规则】提供保障福利，请谨慎修改支付ROI目标和定向，以免失去保障资格
+}
+
+type AdUpdateRoiGoalRes struct {
+	Results []AdUpdateRoiGoalResResults `json:"results"` // 返回数据结果
+}
+
+type AdUpdateRoiGoalResResults struct {
+	Flag         int64  `json:"flag"`          // 更新ROI目标结果，枚举值: 1 成功 0 失败
+	AdId         int64  `json:"ad_id"`         // 计划id
+	ErrorMessage string `json:"error_message"` // 更新ROI目标失败的原因 仅当"flag"为0 时有效
+}
+
+// AdUpdateRoiGoal 更新计划的支付ROI目标
+func (client *Client) AdUpdateRoiGoal(request *AdUpdateRoiGoalReq, response *AdUpdateRoiGoalResResults) error {
+	df := gout.POST(client.url(conf.API_AD_ROI_GOAL_UPDATE)).
+		SetHeader(gout.H{
+			"Access-Token": request.AccessToken,
+		}).
+		SetJSON(request.AdUpdateRoiGoaleBody)
+	return client.DoRequest(df, response)
+}
