@@ -378,7 +378,7 @@ type AdCreateAudience struct {
 	AwemeFanBehaviorsDays  string   `json:"aweme_fan_behaviors_days,omitempty"` // 抖音达人互动用户行为天数
 	AwemeFanCategories     []int64  `json:"aweme_fan_categories,omitempty"`     // 抖音达人分类ID列表，与aweme_fan_behaviors同时设置才会生效（抖音达人定向），可通过【工具-抖音达人-查询抖音类目列表】接口获取
 	AwemeFanAccounts       []int64  `json:"aweme_fan_accounts,omitempty"`       // 抖音达人ID列表，与aweme_fan_behaviors同时设置才会生效（抖音达人定向），可通过【工具-抖音达人-查询抖音类目下的推荐达人】接口获取
-	AutoExtendEnabled      *int64   `json:"auto_extend_enabled,omitempty"`      // 是否启用智能放量，允许值：0 关闭、1 开启
+	AutoExtendEnabled      int64    `json:"auto_extend_enabled,omitempty"`      // 是否启用智能放量，允许值：0 关闭、1 开启
 	AutoExtendTargets      []string `json:"auto_extend_targets,omitempty"`      // 可放开定向列表。当auto_extend_enabled=1 时必填。允许值：AGE 年龄、REGION 地域、GENDER 性别、INTEREST_ACTION 行为兴趣 、CUSTOM_AUDIENCE 更多人群-自定义人群
 	Platform               []string `json:"platform,omitempty"`                 // 投放平台列表，允许值：ANDROID、 IOS、不传值为全选
 	SmartInterestAction    string   `json:"smart_interest_action,omitempty"`    // 行为兴趣意向定向模式，允许值：RECOMMEND系统推荐，CUSTOM 自定义；不传值则为不限制需要注意：如果设置RECOMMEND，则传入action_scene、action_days、action_categories、action_words、 interest_categories、interest_words字段都无效
@@ -432,7 +432,7 @@ type AdCreateImageMaterial struct {
 
 // AdCreateTitleMaterial 广告创意 - 标题类型素材，若选择了抖音号上的视频，不支持修改标题
 type AdCreateTitleMaterial struct {
-	Title        string                 `json:"title,omitempty"`         // 创意标题
+	Title        string                 `json:"title"`                   // 创意标题
 	DynamicWords []AdCreateDynamicWords `json:"dynamic_words,omitempty"` // 动态词包对象列表
 }
 
