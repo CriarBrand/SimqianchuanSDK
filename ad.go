@@ -508,8 +508,8 @@ type AdUpdateRoiGoaleBody struct {
 }
 
 type RoiGoalUpdatesObject struct {
-	AdId    int64 `json:"ad_id"`    // 需要更新ROI目标的计划id
-	RoiGoal int64 `json:"roi_goal"` // 计划更新之后的支付ROI目标，最多支持两位小数，0.01～100 注意： 按展示付费(oCPM)，根据【保障规则】提供保障福利，请谨慎修改支付ROI目标和定向，以免失去保障资格
+	AdId    int64   `json:"ad_id"`    // 需要更新ROI目标的计划id
+	RoiGoal float64 `json:"roi_goal"` // 计划更新之后的支付ROI目标，最多支持两位小数，0.01～100 注意： 按展示付费(oCPM)，根据【保障规则】提供保障福利，请谨慎修改支付ROI目标和定向，以免失去保障资格
 }
 
 type AdUpdateRoiGoalRes struct {
