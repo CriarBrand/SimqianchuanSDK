@@ -90,7 +90,7 @@ const (
 	API_AD_REJECT_REASON = "/open_api/v1.0/qianchuan/ad/reject_reason/"
 
 	// API_AD_ROI_GOAL_UPDATE 更新计划的支付ROI目标
-	API_AD_ROI_GOAL_UPDATE = "/open_api/v1.0/qianchuan/roi/goal/update/"
+	API_AD_ROI_GOAL_UPDATE = "/open_api/v1.0/qianchuan/roi/goal/update"
 
 	// API_CREATIVE_STATUS_UPDATE 更新创意状态
 	API_CREATIVE_STATUS_UPDATE = "/open_api/v1.0/qianchuan/creative/status/update/"
