@@ -368,7 +368,7 @@ type AdCreateDeliverySetting struct {
 type AdCreateAudience struct {
 	AudienceMode           string   `json:"audience_mode,omitempty"`            //人群定向模式 当promotion_way为STANDARD专业推广，千川策略赋默认值自定义，无需传值 当promotion_way为SIMPLE极速推广，需入参，允许值：AUTO智能推荐、CUSTOM自定义
 	OrientationId          int64    `json:"orientation_id,omitempty"`           // 定向包id 注意： 1、仅专业推广支持，极速推广不支持 2、若传入，则表示使用定向包 3、一个定向包最多支持同时应用至1500个计划（不包括已删除计划） 4、若该定向包包含失效人群包（过期、标签下线、精选人群下线）则创建计划失败
-	ExcludeLimitedRegion   *int64   `json:"exclude_limited_region,omitempty"`   // 排除限运地区，允许值： 0：否，默认值 1：是 注： 1、仅同时满足以下条件时，设置为“1”才有效： - 营销目标为短视频带货 - 地域定向类型为“不限”/地域定向的用户状态类型为“正在该地区的用户” 2、当“可放开定向列表”为REGION且排除限运地区时，依旧会探索限运地区的目标人群
+	ExcludeLimitedRegion   int64    `json:"exclude_limited_region,omitempty"`   // 排除限运地区，允许值： 0：否，默认值 1：是 注： 1、仅同时满足以下条件时，设置为“1”才有效： - 营销目标为短视频带货 - 地域定向类型为“不限”/地域定向的用户状态类型为“正在该地区的用户” 2、当“可放开定向列表”为REGION且排除限运地区时，依旧会探索限运地区的目标人群
 	District               string   `json:"district,omitempty"`                 // 地域定向类型，配合 city 字段使用，允许值：CITY 省市， COUNTY 区县， NONE 不限默认值为NONE
 	City                   []int64  `json:"city,omitempty"`                     // 具体定向的城市列表，当 district 为COUNTY，CITY为必填，枚举值详见【附件-city.json】省市的传法："city" : [12], "district" : "CITY"区县的传法："city" : [130102], "district" : "COUNTY"
 	LocationType           string   `json:"location_type,omitempty"`            // 地域定向的用户状态类型，当 district 为COUNTY，CITY为必填，允许值：CURRENT 正在该地区的用户、HOME 居住在该地区的用户、TRAVEL 到该地区旅行的用户、ALL 该地区内的所有用户
