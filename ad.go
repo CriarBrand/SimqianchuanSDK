@@ -531,3 +531,33 @@ func (client *Client) AdUpdateRoiGoal(request *AdUpdateRoiGoalReq, response *AdU
 		SetJSON(request.AdUpdateRoiGoaleBody)
 	return client.DoRequest(df, response)
 }
+
+// -----------------------------------------------------获取低效计划列表------------------------------------------------
+
+type LqAdReq struct {
+	AccessToken string `json:"access_token"`
+	LqAdReqBase
+}
+
+type LqAdReqBase struct {
+	AdvertiserId int64                `json:"advertiser_id"`
+	Filtering    LqAdReqBaseFiltering `json:"filtering,omitempty"`
+}
+
+type LqAdReqBaseFiltering struct {
+	MarketingScene string `json:"marketing_scene,omitempty"` // 按营销场景过滤，允许值： ALL 全部 FEED 通投广告，默认为FEED SEARCH 搜索广告
+}
+
+type LqAdRes struct {
+	AdIds []int64 `json:"ad_ids"` // 低效计划ID列表
+}
+
+// GetLqAdReq 获取低效计划列表
+func (client *Client) GetLqAdReq(request *LqAdReq, response *LqAdRes) error {
+	df := gout.GET(client.url(conf.API_LQ_AD)).
+		SetHeader(gout.H{
+			"Access-Token": request.AccessToken,
+		}).
+		SetQuery(utils.BuildQueryToMap(request.LqAdReqBase))
+	return client.DoRequest(df, response)
+}

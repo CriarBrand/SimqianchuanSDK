@@ -47,6 +47,9 @@ const (
 	// API_REPORT_ADVERTISER_GET 获取广告账户数据
 	API_REPORT_ADVERTISER_GET = "/open_api/v1.0/qianchuan/report/advertiser/get/"
 
+	// API_LQ_AD 获取低效计划
+	API_LQ_AD = "/open_api/v1.0/qianchuan/lq_ad/get/"
+
 	// API_REPORT_AD_GET 获取广告计划数据
 	API_REPORT_AD_GET = "/open_api/v1.0/qianchuan/report/ad/get/"
 
